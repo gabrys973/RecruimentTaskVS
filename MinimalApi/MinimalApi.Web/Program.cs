@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using MinimalApi.Web.Authorization;
 using MinimalApi.Web.Authorization.Services;
+using MinimalApi.Web.Endpoints.Documents;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,6 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<BasicAuthMiddleware>();
 
-app.MapPost("/api/test/{x}", ([FromRoute] int x) => x);
+app.RegisterDocumentEndpoints();
 
 app.Run();
