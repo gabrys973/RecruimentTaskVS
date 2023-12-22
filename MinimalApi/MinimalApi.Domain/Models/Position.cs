@@ -1,6 +1,6 @@
 ﻿namespace MinimalApi.Domain.Models;
 
-public record Position
+public class Position
 {
     public string Code { get; set; }
     public string Name { get; set; }
