@@ -20,6 +20,7 @@ public class DocumentService : IDocumentService
 
         var document = DocumentMapper.MapToDocument(firstLine[1..]);
         documents.Add(document);
+        document.Position = new List<Position>();
 
         foreach (var line in lines[1..])
         {
@@ -27,6 +28,7 @@ public class DocumentService : IDocumentService
             {
                 var splitLine = line.Split(",");
                 document = DocumentMapper.MapToDocument(splitLine[1..]);
+                document.Position = new List<Position>();
                 documents.Add(document);
             }
 
