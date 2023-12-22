@@ -6,13 +6,9 @@ namespace MinimalApi.Tests;
 public class MappersTest
 {
     [Test]
-    public void MapToDocument_Success()
+    public void MapDocument_Success()
     {
-        var data = new[]
-        {
-            "012", "Test", "033", "30-01-2015", "123.0000", "0131", "Firm", "000211", "12-12-2001", "124.21", "23.23",
-            "151.21", "0.00", "0.00", "0.00"
-        };
+        var data = "H,012,Test,033,30-01-2015,123,0131,Firm,000211,12-12-2001,124.21,23.23,151.21,0.00,0.00,0.00,";
 
         var result = DocumentMapper.MapToDocument(data);
 
@@ -20,16 +16,12 @@ public class MappersTest
     }
 
     [Test]
-    public void MapToPosition_Success()
+    public void MapPosition_Success()
     {
-        var data = new[]
-        {
-            "00275", "OSHEE VIT.BLACK 033L", "12.000", "1.63000", "19.56", "0.98", "11.000", "-0.12164", "23.000",
-            "0.79226", "1173"
-        };
+        var data = "B,01315,GAZETA LUBUSKA P/PT.,1.000,1.55000,1.55,0.12,0.000,0.00000,1.000,1.55000,1118,";
 
         var result = PositionMapper.MapToPosition(data);
 
-        Assert.That(result.Amount, Is.EqualTo(12));
+        Assert.That(result.Amount, Is.EqualTo(1));
     }
 }

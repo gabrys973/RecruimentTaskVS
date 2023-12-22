@@ -31,7 +31,7 @@ public class FileProcessTest
 
         Assert.That(result.Documents.Count, Is.EqualTo(3));
     }
-    
+
     [TestCase(0, 3)]
     [TestCase(1, 2)]
     [TestCase(2, 1)]
@@ -52,6 +52,4 @@ public class FileProcessTest
 
         Assert.That(result.Xcount, Is.EqualTo(count));
     }
-
-    
 }

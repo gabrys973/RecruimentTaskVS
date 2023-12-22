@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using MinimalApi.Application.Mappers.Documents;
 using MinimalApi.Application.Mappers.Positions;
+using MinimalApi.Application.Services.Exceptions;
 using MinimalApi.Domain.Models;
 
 namespace MinimalApi.Application.Services.Documents;
@@ -12,13 +13,14 @@ public class DocumentService : IDocumentService
         var documents = new List<Document>();
         var positionSum = 0m;
         var xCount = 0;
-        var productWithMaxNetValue = "";
+
+        var positionMaxPrice = 0m;
+        var positionWithMaxNetValue = "";
 
         var lines = fileContent.ToString().Split("\n");
 
-        var firstLine = lines.First().Split(",");
-
-        var document = DocumentMapper.MapToDocument(firstLine[1..]);
+        var firstLine = lines.First();
+        var document = DocumentMapper.MapToDocument(firstLine);
         documents.Add(document);
         document.Position = new List<Position>();
 
@@ -28,29 +30,38 @@ public class DocumentService : IDocumentService
             {
                 if (document.Position.Count > x)
                     xCount++;
-                
-                var splitLine = line.Split(",");
-                document = DocumentMapper.MapToDocument(splitLine[1..]);
+
+                document = DocumentMapper.MapToDocument(line);
                 document.Position = new List<Position>();
                 documents.Add(document);
+                continue;
             }
 
             if (line.StartsWith('B'))
             {
-                var splitLine = line.Split(",");
-                var position = PositionMapper.MapToPosition(splitLine[1..]);
+                var position = PositionMapper.MapToPosition(line);
                 document.Position.Add(position);
                 positionSum += position.NetWorth;
+
+                if (position.NetPrice > positionMaxPrice)
+                {
+                    positionMaxPrice = position.NetPrice;
+                    positionWithMaxNetValue = position.Name;
+                }
+                continue;
             }
+            
+            if (!line.StartsWith('C') && !string.IsNullOrEmpty(line))
+                throw new InvalidFileDataException();
         }
-        
+
         if (document.Position.Count > x)
             xCount++;
 
         return new DocumentResponse
         {
             Documents = documents, LineCount = linesCount, CharCount = fileContent.Length, Sum = positionSum,
-            Xcount = xCount, ProductWithMaxNetValue = productWithMaxNetValue
+            Xcount = xCount, ProductWithMaxNetValue = positionWithMaxNetValue
         };
     }
 }

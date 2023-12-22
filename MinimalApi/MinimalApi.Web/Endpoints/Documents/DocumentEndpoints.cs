@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using MinimalApi.Application.Services.Documents;
 
 namespace MinimalApi.Web.Endpoints.Documents;
 
@@ -11,7 +13,7 @@ public static class DocumentEndpoints
         return app;
     }
 
-    private static IResult Create(HttpRequest request, [FromRoute] int x)
+    private static IResult Create(HttpRequest request, [FromRoute] int x, IDocumentService documentService)
     {
         if (!request.HasFormContentType || !request.Form.Files.Any())
             return Results.BadRequest(new { message = "There is no file." });
@@ -26,7 +28,21 @@ public static class DocumentEndpoints
 
         if (x < 0)
             return Results.BadRequest(new { message = "X cannot be smaller than 0." });
+        
+        var fileContent = new StringBuilder();
+        var lineCount = 0;
 
-        return Results.Ok();
+        using (var reader = new StreamReader(file.OpenReadStream()))
+        {
+            while (reader.Peek() >= 0)
+            {
+                fileContent.AppendLine(reader.ReadLine());
+                lineCount++;
+            }
+        }
+
+        var result = documentService.ProcessFile(fileContent, lineCount, x);
+
+        return Results.Ok(result);
     }
 }
