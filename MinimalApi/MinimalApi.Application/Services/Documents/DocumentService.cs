@@ -7,7 +7,7 @@ namespace MinimalApi.Application.Services.Documents;
 
 public class DocumentService : IDocumentService
 {
-    public DocumentResponse ProcessFileToDocument(StringBuilder fileContent, int linesCount, int x)
+    public DocumentResponse ProcessFile(StringBuilder fileContent, int linesCount, int x)
     {
         var documents = new List<Document>();
         var positionSum = 0m;
@@ -26,6 +26,9 @@ public class DocumentService : IDocumentService
         {
             if (line.StartsWith('H'))
             {
+                if (document.Position.Count > x)
+                    xCount++;
+                
                 var splitLine = line.Split(",");
                 document = DocumentMapper.MapToDocument(splitLine[1..]);
                 document.Position = new List<Position>();
@@ -37,8 +40,12 @@ public class DocumentService : IDocumentService
                 var splitLine = line.Split(",");
                 var position = PositionMapper.MapToPosition(splitLine[1..]);
                 document.Position.Add(position);
+                positionSum += position.NetWorth;
             }
         }
+        
+        if (document.Position.Count > x)
+            xCount++;
 
         return new DocumentResponse
         {

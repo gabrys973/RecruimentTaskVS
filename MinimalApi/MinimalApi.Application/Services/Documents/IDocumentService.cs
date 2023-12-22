@@ -4,5 +4,5 @@ namespace MinimalApi.Application.Services.Documents;
 
 public interface IDocumentService
 {
-    public DocumentResponse ProcessFileToDocument(StringBuilder result, int linesCount, int i);
+    public DocumentResponse ProcessFile(StringBuilder result, int linesCount, int i);
 }
