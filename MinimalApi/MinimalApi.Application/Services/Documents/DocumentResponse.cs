@@ -9,5 +9,5 @@ public class DocumentResponse
     public int CharCount { get; set; }
     public decimal Sum { get; set; }
     public int Xcount { get; set; }
-    public string ProductWithMaxNetValue { get; set; }
+    public string PositionWithMaxNetPrice { get; set; }
 }

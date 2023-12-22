@@ -52,4 +52,12 @@ public class FileProcessTest
 
         Assert.That(result.Xcount, Is.EqualTo(count));
     }
+    
+    [Test]
+    public void CheckResultMaxNetPricePosition()
+    {
+        var result = _documentService.ProcessFile(_data, 9, 0);
+
+        Assert.That(result.PositionWithMaxNetPrice, Is.EqualTo("LUCKY STRIKE BLUE 23"));
+    }
 }

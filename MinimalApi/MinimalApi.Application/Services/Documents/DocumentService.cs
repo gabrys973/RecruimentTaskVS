@@ -61,7 +61,7 @@ public class DocumentService : IDocumentService
         return new DocumentResponse
         {
             Documents = documents, LineCount = linesCount, CharCount = fileContent.Length, Sum = positionSum,
-            Xcount = xCount, ProductWithMaxNetValue = positionWithMaxNetValue
+            Xcount = xCount, PositionWithMaxNetPrice = positionWithMaxNetValue
         };
     }
 }
